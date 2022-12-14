@@ -4,10 +4,12 @@
 name: .NET
 
 on:
-  push:
-    branches: [ "main" ]
+  workflow_dispatch:
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - "main" 
+    paths:
+      - ".github/workflows/dotnet.yaml"
 
 jobs:
   build:
@@ -25,4 +27,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=TestResults/lcov.info
