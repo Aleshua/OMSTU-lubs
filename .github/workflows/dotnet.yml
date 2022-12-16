@@ -1,6 +1,6 @@
 name: .NET
 
-on: 
+on:
   workflow_dispatch:
   pull_request:
     branches:
@@ -24,4 +24,3 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=TestResults/lcov.info
-
