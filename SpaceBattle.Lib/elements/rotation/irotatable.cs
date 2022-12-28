@@ -2,7 +2,7 @@ using System;
 
 namespace SpaceBattle.Lib {
     public interface IRotatable {
-        public int Angle {get; set;}
-        public int AngleVelocity {get;}
+        public Fraction Angle {get; set;}
+        public Fraction AngleVelocity {get;}
     }
 }

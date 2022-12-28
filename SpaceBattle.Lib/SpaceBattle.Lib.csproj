@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="hwdtech.ioc" Version="1.0.0" />
+    <PackageReference Include="hwdtech.ioc.scopebasediocimplementation" Version="1.0.0" />
+    <PackageReference Include="hwdtech.ioc.singlethreadscope" Version="1.0.0" />
+  </ItemGroup>
+
 </Project>
