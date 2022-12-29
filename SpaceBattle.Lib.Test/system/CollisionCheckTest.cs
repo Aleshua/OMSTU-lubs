@@ -15,7 +15,7 @@ namespace SpaceBattle.Lib.Test {
             regStrategy.Setup(s => s.Execute(It.IsAny<object[]>())).Returns(new List<int>());
 
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Collision.GetList", (object[] args) => regStrategy.Object.Execute(args)).Execute();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Collision.GetDeltas", (object[] args) => regStrategy.Object.Execute(args)).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Collision.GetDeltas", (object[] args) => new GetDeltasStrategy().Execute(args)).Execute();
         }
 
         [Fact]

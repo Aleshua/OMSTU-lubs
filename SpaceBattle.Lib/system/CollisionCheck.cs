@@ -13,10 +13,7 @@ namespace SpaceBattle.Lib {
         
         public void Execute()
         {   
-            var list1 = IoC.Resolve<List<int>>("Collision.GetList", uObject1);
-            var list2 = IoC.Resolve<List<int>>("Collision.GetList", uObject2);    
-
-            var dlist = IoC.Resolve<List<int>>("Collision.GetDeltas", list1, list2);
+            var dlist = IoC.Resolve<IEnumerable<int>>("Collision.GetDeltas", uObject1, uObject2);
 
             if (IoC.Resolve<bool>("Collision.CheckWithTree", dlist)) 
             {
