@@ -23,7 +23,6 @@ public class EndMoveCommandTests
         var mve = new Mock<IMoveCommandEndable>();
         mve.SetupGet(x => x.MoveCommand).Returns(new Mock<ICommand>().Object);
         mve.SetupGet(x => x.UObject).Returns(new Mock<IUObject>().Object);
-        mve.SetupGet(x => x.Queue).Returns(new Mock<Queue<ICommand>>().Object);
         ICommand EndMoveCommand = new EndMoveCommand(mve.Object);
         EndMoveCommand.Execute();
         mve.VerifyAll();
@@ -36,7 +35,6 @@ public class EndMoveCommandTests
 
             mve.SetupGet(x => x.MoveCommand).Throws(new Exception());
             mve.SetupGet(x => x.UObject).Returns(new Mock<IUObject>().Object);
-            mve.SetupGet(x => x.Queue).Returns(new Mock<Queue<ICommand>>().Object);
             ICommand endMoveCommand = new EndMoveCommand(mve.Object);
             Assert.Throws<Exception>(() => endMoveCommand.Execute());
         }
@@ -48,20 +46,7 @@ public class EndMoveCommandTests
 
             mve.SetupGet(x => x.MoveCommand).Returns(new Mock<ICommand>().Object);
             mve.SetupGet(x => x.UObject).Throws(new Exception());
-            mve.SetupGet(x => x.Queue).Returns(new Mock<Queue<ICommand>>().Object);
             ICommand endMoveCommand = new EndMoveCommand(mve.Object);
             Assert.Throws<Exception>(() => endMoveCommand.Execute());
-        }
-
-    [Fact]
-    public void EndMoveCommandUnreadableQueue()
-        {
-            var mve = new Mock<IMoveCommandEndable>();
-
-            mve.SetupGet(x => x.MoveCommand).Returns(new Mock<ICommand>().Object);
-            mve.SetupGet(x => x.UObject).Throws(new Exception());
-            mve.SetupGet(x => x.Queue).Returns(new Mock<Queue<ICommand>>().Object);
-            ICommand endMoveCommand = new EndMoveCommand(mve.Object);
-            Assert.Throws<Exception>(() => endMoveCommand.Execute());
-        }    
+        }   
 }
