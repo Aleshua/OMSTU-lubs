@@ -6,5 +6,9 @@ namespace SpaceBattle.Lib {
         IUObject uObject { get; }
         Vector velocity { get; }
         Queue<ICommand> queue { get; }
+        IDictionary<string, object> dict
+        {
+            get;
+        }
     }
 }
