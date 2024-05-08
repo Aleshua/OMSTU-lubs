@@ -24,3 +24,13 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=TestResults/lcov.info
+    - name: Upload report to codecov
+      uses: codecov/codecov-action@v2
+      with:
+            token: ${{ secrets.CODECOV_TOKEN }}
+            files: ./coverage.xml
+            flags: tests
+            name: codecov-placeholder-service
+            fail_ci_if_error: true
+            verbose: true 
+      
