@@ -12,6 +12,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.0" />
     <PackageReference Include="dotnet-reportgenerator-cli" Version="4.6.7" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
+    <PackageReference Include="Hwdtech.Core" Version="1.0.0" />
     <PackageReference Include="hwdtech.ioc" Version="1.0.0" />
     <PackageReference Include="Hwdtech.Ioc.ScopeBasedIoCImplementation" Version="1.0.0" />
     <PackageReference Include="Hwdtech.Ioc.SingleThreadScope" Version="1.0.0" />
