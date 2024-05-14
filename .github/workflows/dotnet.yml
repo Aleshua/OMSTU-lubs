@@ -23,8 +23,3 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=TestResults/lcov.info
-    - name: Report Coverage
-      uses: codecov/codecov-action@v2
-      with:
-        files: TestResults/lcov.info
-        fail_ci_if_error: true
