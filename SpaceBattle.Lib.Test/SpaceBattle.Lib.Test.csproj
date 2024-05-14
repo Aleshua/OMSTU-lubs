@@ -4,9 +4,6 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <CollectCoverage>true</CollectCoverage>
-    <CoverletOutputFormat>lcov</CoverletOutputFormat>
-    <CoverletOutput>$(OutputDirectory)</CoverletOutput>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
