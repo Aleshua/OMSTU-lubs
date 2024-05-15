@@ -1,3 +1,4 @@
+using Hwdtech;
 namespace SpaceBattle.Lib {
     public class ActionCommand : ICommand
     {

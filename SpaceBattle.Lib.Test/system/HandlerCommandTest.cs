@@ -1,4 +1,3 @@
-namespace SpaceBattle.Lib.Test;
 using Hwdtech;
 using Hwdtech.Ioc;
 using Moq;
@@ -8,6 +7,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+namespace SpaceBattle.Lib.Test;
+
 public class HandlerCommandTests
 {
     const int n_threads = 3;
@@ -15,7 +16,7 @@ public class HandlerCommandTests
     public HandlerCommandTests()
     {
         new Hwdtech.Ioc.InitScopeBasedIoCImplementationCommand().Execute();
-        IoC.Resolve<ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
+        IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
 
         var start = new Mock<SpaceBattle.Lib.ICommand>();
         start.Setup(c => c.Execute());
@@ -35,17 +36,17 @@ public class HandlerCommandTests
         var StopThreadStrategy = new Mock<IStrategy>();
         StopThreadStrategy.Setup(c => c.Execute(It.IsAny<object[]>())).Returns(stop.Object);
 
-        IoC.Resolve<ICommand>("IoC.Register", "Game.Threads.CreateAndStart", (object[] args) => StartThreadStrategy.Object.Execute(args)).Execute();
-        IoC.Resolve<ICommand>("IoC.Register", "Game.Threads.SoftStop", (object[] args) => StopThreadStrategy.Object.Execute(args)).Execute();
-        IoC.Resolve<ICommand>("IoC.Register", "Game.Senders.Send", (object[] args) => SendStrategy.Object.Execute(args)).Execute();
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Threads.CreateAndStart", (object[] args) => StartThreadStrategy.Object.Execute(args)).Execute();
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Threads.SoftStop", (object[] args) => StopThreadStrategy.Object.Execute(args)).Execute();
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Senders.Send", (object[] args) => SendStrategy.Object.Execute(args)).Execute();
 
-        IoC.Resolve<ICommand>("IoC.Register", "StartServerCommand", (object[] args) => new ActionCommand(() => {
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "StartServerCommand", (object[] args) => new ActionCommand(() => {
             new StartServerCommand((int) args[0]).Execute();
         })).Execute();
-        IoC.Resolve<ICommand>("IoC.Register", "StopServerCommand", (object[] args) => new ActionCommand(() => {
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "StopServerCommand", (object[] args) => new ActionCommand(() => {
             new StopServerCommand((int) args[0]).Execute();
         })).Execute();
-        IoC.Resolve<ICommand>("IoC.Register", "CatchException", (object[] args) => new ActionCommand(() => {
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "CatchException", (object[] args) => new ActionCommand(() => {
             new HandlerCommand((string) args[0]).Execute();
         })).Execute();
     }
