@@ -1,7 +1,6 @@
 namespace SpaceBattle.Lib;
 using Hwdtech;
 using System.Collections.Concurrent;
-using Hwdtech.Ioc;
 
 public class ConsoleServer
 {

@@ -1,6 +1,4 @@
 namespace SpaceBattle.Lib;
-using Hwdtech;
-using Hwdtech.Ioc;
 
 
 public class HandlerCommand : ICommand
