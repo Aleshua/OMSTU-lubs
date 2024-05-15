@@ -1,14 +1,29 @@
 namespace SpaceBattle.Lib;
 using Hwdtech;
+using Hwdtech.Ioc;
 
 public class StopServerCommand : ICommand
 {
+    public int n_threads;
+
+    public StopServerCommand(int n_threads)
+    {
+        this.n_threads = n_threads;
+    }
+
     public void Execute()
-    {   
-        Dictionary<string, string> myThreads = IoC.Resolve<Dictionary<string, string>>("Thread.GetDictionary");
-        foreach (string threadId in myThreads.Keys)
+    {
+        try
         {
-            IoC.Resolve<ICommand>("Thread.HardStopTheThreads", threadId).Execute();
+            for (int id = 0; id < n_threads; id++)
+            {
+                string thread_id = Convert.ToString(id);
+                IoC.Resolve<ICommand>("Game.Senders.Send", thread_id, IoC.Resolve<ICommand>("Game.Threads.SoftStop", thread_id)).Execute();
+            }
+        }
+        catch (Exception e)
+        {
+            IoC.Resolve<ICommand>("CatchException", "Soft Stop Thread, " + e.Message).Execute();
         }
     }
 }

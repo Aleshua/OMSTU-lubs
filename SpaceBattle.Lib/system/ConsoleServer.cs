@@ -1,26 +1,24 @@
 namespace SpaceBattle.Lib;
 using Hwdtech;
 using System.Collections.Concurrent;
+using Hwdtech.Ioc;
 
-public class ServerProgram
+public class ConsoleServer
 {
-    public static void Main(string[] args){
-        int numOfThread = int.Parse(args[0]);
+    private int n_threads;
 
-        Console.WriteLine("Launching server...");
+    public ConsoleServer(int n_threads)
+    {
+        this.n_threads = n_threads;
+    }
 
-        IoC.Resolve<ICommand>("Thread.ConsoleStartServer", numOfThread).Execute();
-
-        Console.WriteLine("All threads are functioning");
-
-        Console.WriteLine("Press any key to stop the server...");
+    public void Execute()
+    {
+        Console.WriteLine("Starting the server...");
+        IoC.Resolve<ICommand>("StartServerCommand", n_threads).Execute();
+        Console.WriteLine("Waiting for a press key . . .");
         Console.Read();
-
-        Console.WriteLine("Stopping server...");
-
-        IoC.Resolve<ICommand>("Thread.ConsoleStopServer").Execute();
-
-        Console.WriteLine("Exiting. Press any key to exit...");
-        Console.Read();
+        Console.WriteLine("Stopping the server...");
+        IoC.Resolve<ICommand>("StopServerCommand", n_threads).Execute();
     }
 }

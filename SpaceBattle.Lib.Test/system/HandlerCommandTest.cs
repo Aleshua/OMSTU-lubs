@@ -1,35 +1,29 @@
 namespace SpaceBattle.Lib.Test;
-
-using Xunit;
-using Moq;
-using System;
-using System.IO;
-using System.Collections.Generic;
 using Hwdtech;
 using Hwdtech.Ioc;
+using Moq;
+using Xunit;
 
-public class ConsoleServerTests
+public class HandlerCommandTests
 {
     const int n_threads = 3;
 
-    int n_starts = 0, n_stops = 0;
-
-    public ConsoleServerTests()
+    public HandlerCommandTests()
     {
         new Hwdtech.Ioc.InitScopeBasedIoCImplementationCommand().Execute();
         IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
 
         var start = new Mock<SpaceBattle.Lib.ICommand>();
-        start.Setup(c => c.Execute()).Callback(() => { n_starts++; });
+        start.Setup(c => c.Execute());
 
         var StartThreadStrategy = new Mock<IStrategy>();
-        StartThreadStrategy.Setup(c => c.Execute(It.IsAny<object[]>())).Returns(start.Object).Verifiable();
+        StartThreadStrategy.Setup(c => c.Execute(It.IsAny<object[]>())).Throws(new Exception());
 
         var send = new Mock<SpaceBattle.Lib.ICommand>();
-        send.Setup(c => c.Execute()).Callback(() => { n_stops++; });
+        send.Setup(c => c.Execute());
 
         var SendStrategy = new Mock<IStrategy>();
-        SendStrategy.Setup(c => c.Execute(It.IsAny<object[]>())).Returns(send.Object).Verifiable();
+        SendStrategy.Setup(c => c.Execute(It.IsAny<object[]>())).Throws(new Exception());
 
         var stop = new Mock<SpaceBattle.Lib.ICommand>();
         stop.Setup(c => c.Execute());
@@ -53,34 +47,29 @@ public class ConsoleServerTests
     }
 
     [Fact]
-    public void ConsoleServerTest()
+    public void HandlerCommandTest()
     {
-        var server = new ConsoleServer(3);
-        server.Execute();
-
-        Assert.Equal(n_threads, n_stops);
-        Assert.Equal(n_threads, n_starts);
+        var cmd = new HandlerCommand("Exception");
+        cmd.Execute();
+        var str = File.ReadLines("Exceptions.txt").ToList().Last();
+        Assert.Equal("Exception", str);
     }
 
     [Fact]
-    public void StartServerCommandTest()
+    public void StartServerExceptionTest()
     {
-        n_starts = 0;
+        IoC.Resolve<ICommand>("StartServerCommand", n_threads).Execute();
 
-        var cmd = new StartServerCommand(n_threads);
-        cmd.Execute();
-
-        Assert.Equal(n_threads, n_starts);
+        var str = File.ReadLines("Exceptions.txt").ToList().Last();
+        Assert.Equal("Start Thread, Exception of type 'System.Exception' was thrown.", str);
     }
 
     [Fact]
-    public void StopServerCommandTest()
+    public void StopServerExceptionTest()
     {
-        n_stops = 0;
+        IoC.Resolve<ICommand>("StopServerCommand", n_threads).Execute();
 
-        var cmd = new StopServerCommand(n_threads);
-        cmd.Execute();
-
-        Assert.Equal(n_threads, n_stops);
+        var str = File.ReadLines("Exceptions.txt").ToList().Last();
+        Assert.Equal("Soft Stop Thread, Exception of type 'System.Exception' was thrown.", str);
     }
 }
