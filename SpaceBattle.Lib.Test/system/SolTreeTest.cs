@@ -23,8 +23,9 @@ public class SolutionTreeTests
     [Fact]
     public void SuccesfulBuildSolutionTree()
     {
-        var path = "/home/runner/work/OMSTU-lubs5/OMSTU-lubs5/SpaceBattle.Lib.Test/file.txt";
-        var buildCommand = new BuildSolutionTreeCommand(path);
+        var relativePath = "file.txt";
+        var fullPath = Path.GetFullPath(relativePath);
+        var buildCommand = new BuildSolutionTreeCommand(fullPath);
 
         buildCommand.Execute();
 
