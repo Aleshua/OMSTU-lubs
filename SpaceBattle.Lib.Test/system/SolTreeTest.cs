@@ -5,7 +5,7 @@ using Moq;
 
 namespace SpaceBattle.Lib.Test;
 
-/*
+
 public class SolutionTreeTests
 {
     public SolutionTreeTests()
@@ -41,4 +41,3 @@ public class SolutionTreeTests
         Assert.True(((IDictionary<int, object>)((IDictionary<int, object>) a[1])[2]).ContainsKey(4));
     }  
 }
-*/
