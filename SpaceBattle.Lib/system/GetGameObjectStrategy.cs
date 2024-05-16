@@ -1,11 +1,16 @@
+using Hwdtech;
+using Hwdtech.Ioc;
+
 namespace SpaceBattle.Lib;
 
-public class GetGameObjectStrategy : IStrategy
-{   
-    public object Execute(params object[] param)
+public class GetItemStrategy : IStrategy
+{
+    public object Execute(params object[] args)
     {
-        string gameItemId = (string) param[1];
-        Dictionary<string, object> objects = (Dictionary<string, object>) param[0];
-        return objects[gameItemId];
+        Dictionary<string, IUObject> objects = IoC.Resolve<Dictionary<string, IUObject>>("Get.Objects");
+        objects.TryGetValue((string) args[0], out IUObject obj);
+
+        if (obj != null) return obj;
+        throw new Exception();
     }
 }

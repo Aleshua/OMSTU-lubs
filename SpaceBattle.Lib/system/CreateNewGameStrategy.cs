@@ -1,21 +1,24 @@
-namespace SpaceBattle.Lib;
 using Hwdtech;
+using Hwdtech.Ioc;
 
-public class CreateNewGameStrategy : IStrategy
+namespace SpaceBattle.Lib;
+
+public class CreateGameStrategy : IStrategy
 {
+    readonly int quant;
+    readonly string id;
+
+    public CreateGameStrategy(string id, int quant)
+    {
+        this.quant = quant;
+        this.id = id;
+    }
+
     public object Execute(params object[] args)
-    {   
-        string gameId = (string) args[0];
+    {
+        Queue<ICommand> queue = new();
+        object newScope = new InitializeScopeStrategy().Execute(id, quant);
 
-        new Hwdtech.Ioc.InitScopeBasedIoCImplementationCommand().Execute();
-        var scope = IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"));
-
-        Queue<ICommand> commandQueue = new Queue<ICommand>();
-        IReceiver receiver = new QueueAdapter(commandQueue);
-
-        Dictionary<string, Queue<ICommand>> gamesDictionary = IoC.Resolve<Dictionary<string, Queue<ICommand>>>("Game.Get.GamesDictioanary");
-        gamesDictionary.Add(gameId, commandQueue);
-
-        return new GameCommand(gameId);
+        return IoC.Resolve<ICommand>("Commands.GameCommand", newScope, queue);
     }
 }

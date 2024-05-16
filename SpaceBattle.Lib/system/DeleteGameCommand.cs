@@ -1,16 +1,20 @@
-namespace SpaceBattle.Lib;
 using Hwdtech;
+using Hwdtech.Ioc;
+
+namespace SpaceBattle.Lib;
 
 public class DeleteGameCommand : ICommand
 {
-    private string gameId;
-    public DeleteGameCommand(string gameId)
+    readonly string id;
+
+    public DeleteGameCommand(string id)
     {
-        this.gameId = gameId;
+        this.id = id;
     }
+
     public void Execute()
     {
-        Dictionary<string, object> scopeMap = IoC.Resolve<Dictionary<string, object>>("Game.ScopeMap");
-        scopeMap.Remove(gameId);
+        ICommand command = IoC.Resolve<ICommand>("Scope.Delete", id);
+        command.Execute();
     }
 }

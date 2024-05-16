@@ -1,16 +1,20 @@
+using Hwdtech;
+using Hwdtech.Ioc;
+
 namespace SpaceBattle.Lib;
 
-public class DeleteGameObjectCommand : ICommand
-{   
-    Dictionary<string, object> objects;
-    string gameItemId;
-    public DeleteGameObjectCommand(Dictionary<string, object> objects, string gameItemId)
+public class DeleteItemCommand : ICommand
+{
+    readonly string id;
+
+    public DeleteItemCommand(string id)
     {
-        this.objects = objects;
-        this.gameItemId = gameItemId;
+        this.id = id;
     }
+
     public void Execute()
     {
-        objects.Remove(gameItemId);
+        Dictionary<string, IUObject> objects = IoC.Resolve<Dictionary<string, IUObject>>("Get.Objects");
+        objects.Remove(id);
     }
 }
