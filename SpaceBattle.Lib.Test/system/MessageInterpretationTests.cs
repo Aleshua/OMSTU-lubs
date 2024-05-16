@@ -1,69 +1,109 @@
-namespace SpaceBattle.Lib.Test;
 using Xunit;
 using Moq;
 using Hwdtech;
 using Hwdtech.Ioc;
 using System.Collections.Generic;
 
-public class MessageInterpretationTests
+namespace SpaceBattle.Lib.Test;
+
+public class InterpretationTest
 {
-    bool startMoveSent = false;
-    bool propertiesWereSet = false;
-    bool objectWasGet = false;
-    bool commandsWereSent = false;
-    public MessageInterpretationTests()
+    readonly Dictionary<int, Queue<ICommand>> currentGames = new Dictionary<int, Queue<ICommand>>();
+    public InterpretationTest()
     {
         new InitScopeBasedIoCImplementationCommand().Execute();
-        var scope = IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root")));
-        scope.Execute();
+        IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
 
-        IoC.Resolve<ICommand>("IoC.Register", "SendCommand", (object[] args) =>
-        {
-            return new ActionCommand(() => { commandsWereSent = true; });
-        }).Execute();
+        currentGames.Add(1, new Queue<ICommand>());
+        currentGames.Add(2, new Queue<ICommand>());
+        currentGames.Add(3, new Queue<ICommand>());
 
-        IoC.Resolve<ICommand>("IoC.Register", "Command.StartMovement", (object[] args) =>
-        {
-            startMoveSent = true;
-            var m = new Mock<IMoveCommandStartable>();
-            m.SetupGet(a => a.uObject).Returns(new Mock<IUObject>().Object).Verifiable();
-            m.SetupGet(a => a.dict).Returns(new Dictionary<string, object>() { { "speed", new Vector(It.IsAny<int>(), It.IsAny<int>()) } }).Verifiable();
-            return new StartMoveCommand(m.Object);
-        }).Execute();
-
-        IoC.Resolve<ICommand>("IoC.Register", "GetObjectById", (object[] args) =>
-        {
-            objectWasGet = true;
-            var obj = new Mock<IUObject>();
-            return obj.Object;
-        }).Execute();
-
-        IoC.Resolve<ICommand>("IoC.Register", "SetPropertiesCommand", (object[] args) =>
-        {
-            return new ActionCommand(() => { propertiesWereSet = true; });
-        }).Execute();
-
-
+        var command = new Mock<ICommand>();
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Command.CommandName", (object[] args) => command.Object).Execute();
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "GetGameQueue", (object[] args) => currentGames).Execute();
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "CreateCommand", (object[] args) => new CreateCommandStrategy().Execute(args)).Execute();
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "PushInQueue", (object[] args) => new InQueueStrategy().Execute(args)).Execute();
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "GetQueue", (object[] args) => new GetQueueStrategy().Execute(args)).Execute();
     }
+
     [Fact]
-    public void InterpretationCommandTests()
+    public void PositiveTest()
     {
-        var mockMessage = new Mock<IMessage>();
+        var message = new Mock<IMessage>();
 
+        var jsonData = new
+        {
+            CommandType = "CommandName",
+            GameID = 1,
+            ItemID = 1
+        };
 
-        mockMessage.SetupGet(m => m.type).Returns("StartMovement");
-        mockMessage.SetupGet(m => m.gameId).Returns("asdfg");
-        mockMessage.SetupGet(m => m.gameItemId).Returns("548");
-        var properties = new Dictionary<string, object> { { "InititalVelocity", 2 }, { "InititialSmth", 10 } };
-        mockMessage.SetupGet(m => m.properties).Returns(properties);
+        message.SetupGet(x => x.CmdType).Returns(jsonData.CommandType);
+        message.SetupGet(x => x.GameID).Returns(jsonData.GameID);
+        message.SetupGet(x => x.ItemID).Returns(jsonData.ItemID);
 
-        var interpretationCommand = new InterpretationCommand(mockMessage.Object);
+        var intcmd = new InterpretationCommand(message.Object);
+        intcmd.Execute();
 
-        interpretationCommand.Execute();
+        jsonData = new
+        {
+            CommandType = "CommandName",
+            GameID = 3,
+            ItemID = 1
+        };
 
-        Assert.True(propertiesWereSet);
-        Assert.True(startMoveSent);
-        Assert.True(commandsWereSent);
-        Assert.True(objectWasGet);
+        message.SetupGet(x => x.CmdType).Returns(jsonData.CommandType);
+        message.SetupGet(x => x.GameID).Returns(jsonData.GameID);
+        message.SetupGet(x => x.ItemID).Returns(jsonData.ItemID);
+
+        intcmd = new InterpretationCommand(message.Object);
+        intcmd.Execute();
+        intcmd.Execute();
+
+        Assert.True(currentGames[1].Count == 1);
+        Assert.True(currentGames[2].Count == 0);
+        Assert.True(currentGames[3].Count == 2);
+    }
+
+    [Fact]
+    public void GameIDException()
+    {
+        var message = new Mock<IMessage>();
+
+        var jsonData = new
+        {
+            CommandType = "CommandName",
+            GameID = 4,
+            ItemID = 1
+        };
+
+        message.SetupGet(x => x.CmdType).Returns(jsonData.CommandType);
+        message.SetupGet(x => x.GameID).Returns(jsonData.GameID);
+        message.SetupGet(x => x.ItemID).Returns(jsonData.ItemID);
+
+        var intcmd = new InterpretationCommand(message.Object);
+
+        Assert.ThrowsAny<Exception>(() => intcmd.Execute());
+    }
+
+    [Fact]
+    public void CommandTypeException()
+    {
+        var message = new Mock<IMessage>();
+
+        var jsonData = new
+        {
+            CommandType = "NonExistentCommand",
+            GameID = 2,
+            ItemID = 1
+        };
+
+        message.SetupGet(x => x.CmdType).Returns(jsonData.CommandType);
+        message.SetupGet(x => x.GameID).Returns(jsonData.GameID);
+        message.SetupGet(x => x.ItemID).Returns(jsonData.ItemID);
+
+        var intcmd = new InterpretationCommand(message.Object);
+
+        Assert.ThrowsAny<Exception>(() => intcmd.Execute());
     }
 }

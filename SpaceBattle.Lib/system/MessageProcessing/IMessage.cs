@@ -1,8 +1,7 @@
 namespace SpaceBattle.Lib;
 
-public interface IMessage {
-    public string type {get;}
-    public string gameId {get;}
-    public string gameItemId {get;}
-    public IDictionary<string, object> properties {get;}
+public interface IMessage{
+    public string CmdType { get; } 
+    public int GameID { get; }
+    public int ItemID { get; }
 }

@@ -1,22 +1,22 @@
-namespace SpaceBattle.Lib;
 using System.Collections.Concurrent;
 using Hwdtech;
+using Hwdtech.Ioc;
+
+namespace SpaceBattle.Lib;
 
 public class InterpretationCommand : ICommand
 {
-    private IMessage message;
+    private readonly IMessage message;
 
-    public InterpretationCommand(IMessage message)
+    public InterpretationCommand(IMessage msg)
     {
-        this.message = message;
+        message = msg;
     }
 
-    public void Execute(){
-        var obj = IoC.Resolve<IUObject>("GetObjectById", message.gameItemId);
-        IoC.Resolve<ICommand>("SetPropertiesCommand", obj, message.properties).Execute();
+    public void Execute()
+    {
+        var cmd = IoC.Resolve<ICommand>("CreateCommand", message);
 
-        var newCommand = IoC.Resolve<ICommand>("Command." + message.type, obj);
-
-        IoC.Resolve<ICommand>("SendCommand", message.gameId, newCommand).Execute();
+        IoC.Resolve<ICommand>("PushInQueue", message.GameID, cmd).Execute();
     }
 }
