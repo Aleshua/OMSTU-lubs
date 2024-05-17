@@ -40,7 +40,7 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          token: 880c4b51-f794-4be6-ba09-c33133857067
           files: ./TestResults/**/coverage.cobertura.xml
           flags: unittests
           name: code-coverage-report
