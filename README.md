@@ -1,1 +1,1 @@
-[![codecov]([https://app.codecov.io/github/Aleshua/OMSTU-lubs5/tree/lab8--2?displayType=list](https://app.codecov.io/gh/Aleshua/OMSTU-lubs5))
+[![codecov](https://codecov.io/gh/Aleshua/OMSTU-lubs5/graph/badge.svg?token=JMHEWDTG1D)](https://codecov.io/gh/Aleshua/OMSTU-lubs5)
