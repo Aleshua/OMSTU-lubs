@@ -45,18 +45,3 @@ jobs:
           flags: unittests
           name: code-coverage-report
           fail_ci_if_error: true
-          
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-results
-          path: TestResults
-
-      - name: Upload coverage report
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage-report
-          path: TestResults/Coverage
-          
