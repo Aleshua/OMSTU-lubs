@@ -5,7 +5,7 @@ using Moq;
 
 namespace SpaceBattle.Lib.Test;
 
-/*
+
 public class SolutionTreeTests
 {
     public SolutionTreeTests()
@@ -23,8 +23,8 @@ public class SolutionTreeTests
     [Fact]
     public void SuccesfulBuildSolutionTree()
     {
-        var path = @"../../../file.txt";
-        var buildCommand = new BuildSolutionTreeCommand(path);
+        var fullPath = "/home/runner/work/OMSTU-lubs5/OMSTU-lubs5/SpaceBattle.Lib.Test/system/file.txt";
+        var buildCommand = new BuildSolutionTreeCommand(fullPath);
 
         buildCommand.Execute();
 
@@ -41,4 +41,3 @@ public class SolutionTreeTests
         Assert.True(((IDictionary<int, object>)((IDictionary<int, object>) a[1])[2]).ContainsKey(4));
     }  
 }
-*/
