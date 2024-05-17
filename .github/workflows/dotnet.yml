@@ -26,11 +26,8 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --collect:"XPlat Code Coverage" --results-directory TestResults
-    - name: Generate coverage report
-      run: reportgenerator -reports:TestResults/*/coverage.cobertura.xml -targetdir:TestResults/CoverageReport
-    - name: Upload coverage report
-      uses: actions/upload-artifact@v3
+      run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=TestResults/lcov.info
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v4.0.1
       with:
-        name: coverage-report
-        path: TestResults/CoverageReport
+        token: ${{ secrets.CODECOV_TOKEN }}
