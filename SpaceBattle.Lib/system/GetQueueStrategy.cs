@@ -9,10 +9,10 @@ public class GetQueueStrategy : IStrategy
     {
         int id = (int) args[0];
 
-        Queue<ICommand> queue;
+        Queue<ICommand>? queue;
 
         IoC.Resolve<IDictionary<int, Queue<ICommand>>>("GetGameQueue").TryGetValue(id, out queue);
 
-        return queue;
+        return queue!;
     }
 }
