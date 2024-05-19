@@ -14,11 +14,11 @@ namespace SpaceBattle.Lib
         }
 
         public override bool Equals(object? obj){
-            var item = obj as Vector;
-            if (item is Vector){
-                return obj is Vector && item == this;
+            if (obj is Vector item)
+            {
+                return this == item;
             }
-            return false;
+    return false;
         }
 
 
@@ -113,11 +113,6 @@ namespace SpaceBattle.Lib
             
             if (x.Size > y.Size){
                 return false;
-            }
-            for (int i = 0; i < x.Size; i++){
-                if (x[i] > y[i]){
-                    return false;
-                }
             }
             return true;
 

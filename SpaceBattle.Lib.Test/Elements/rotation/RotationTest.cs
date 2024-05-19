@@ -42,7 +42,8 @@ namespace SpaceBattle.Lib.Test {
             var rotatable = new Mock<IRotatable>();
             rotatable.SetupProperty(m => m.Angle, new Fraction(45));
             rotatable.SetupGet(m => m.AngleVelocity).Returns(new Fraction(90));
-            rotatable.SetupSet(m => m.Angle = It.IsAny<Fraction>()).Throws<Exception>();   
+            rotatable.SetupSet(m => m.Angle = It.IsAny<Fraction>())
+                     .Callback<Fraction>(angle => throw new Exception());   
             
             RotateCommand command = new RotateCommand(rotatable.Object);
             Assert.Throws<Exception>(() => command.Execute());
