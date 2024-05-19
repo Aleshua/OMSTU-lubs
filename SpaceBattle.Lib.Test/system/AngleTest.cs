@@ -64,4 +64,12 @@ public class AngleTests
         var b = new Fraction(1, 2);
         Assert.True(a.Equals(b));
     }
+
+    [Fact]
+    public void AngleNotEqualDifferentType()
+    {
+        var a = new Fraction(1, 2);
+        var b = new object();
+        Assert.False(a.Equals(b));
+    }
 }
