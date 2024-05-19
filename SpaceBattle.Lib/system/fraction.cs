@@ -36,18 +36,12 @@ namespace SpaceBattle.Lib {
 
         public override bool Equals(object? obj)
         {
-            if (ReferenceEquals(this, obj))
+            if (obj is Fraction fraction)
             {
-                return true;
+                return fraction.numerator == numerator && fraction.denominator == denominator;
             }
 
-            if (obj is null || GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            var item = (Fraction)obj;
-            return numerator == item.numerator && denominator == item.denominator;
+            return false;
         }
     }
 }
