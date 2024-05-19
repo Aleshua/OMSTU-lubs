@@ -8,15 +8,8 @@ namespace SpaceBattle.Lib {
 
         public Fraction(int n, int d = 1){
             int gcd = GCD(n, d);
-            if ((double)n / d > 360){
-                n /= gcd;
-                d /= gcd;
-                numerator = n % (360 * d);
-                denominator = d;
-            } else {
                 numerator = n / gcd;
                 denominator = d / gcd;
-            }
         }
 
         private int GCD(int x, int y){
@@ -43,12 +36,11 @@ namespace SpaceBattle.Lib {
 
         public override bool Equals(object? obj)
         {
-            var item = obj as Fraction;
-
-            if (item is null){
-                return false;
+            if (obj is Fraction item)
+            {
+                return item.numerator == numerator && item.denominator == denominator;
             }
-            return item.numerator == numerator && item.denominator == denominator;
+            return false;
         }
     }
 }
