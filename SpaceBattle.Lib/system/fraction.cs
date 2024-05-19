@@ -8,15 +8,15 @@ namespace SpaceBattle.Lib {
 
         public Fraction(int n, int d = 1){
             int gcd = GCD(n, d);
-            // if ((double)n / d > 360){
-            //     n /= gcd;
-            //     d /= gcd;
-            //     numerator = n % (360 * d);
-            //     denominator = d;
-            // } else {
-            //     numerator = n / gcd;
-            //     denominator = d / gcd;
-            // }
+            if ((double)n / d > 360){
+                n /= gcd;
+                d /= gcd;
+                numerator = n % (360 * d);
+                denominator = d;
+            } else {
+                numerator = n / gcd;
+                denominator = d / gcd;
+            }
         }
 
         private int GCD(int x, int y){

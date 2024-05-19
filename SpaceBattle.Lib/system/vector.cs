@@ -16,7 +16,7 @@ namespace SpaceBattle.Lib
         public override bool Equals(object? obj){
             var item = obj as Vector;
             if (item is Vector){
-                // return obj is Vector && item == this;
+                return obj is Vector && item == this;
             }
             return false;
         }
