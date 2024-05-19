@@ -42,7 +42,7 @@ namespace SpaceBattle.Lib {
             }
 
             var item = (Fraction)obj;
-            return item.numerator == this.numerator && item.denominator == this.denominator;
+            return item?.numerator == this.numerator && item?.denominator == this.denominator;
         }
     }
 }
