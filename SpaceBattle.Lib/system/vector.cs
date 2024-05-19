@@ -114,11 +114,11 @@ namespace SpaceBattle.Lib
             if (x.Size > y.Size){
                 return false;
             }
-            // for (int i = 0; i < x.Size; i++){
-            //     if (x[i] > y[i]){
-            //         return false;
-            //     }
-            // }
+            for (int i = 0; i < x.Size; i++){
+                if (x[i] > y[i]){
+                    return false;
+                }
+            }
             return true;
 
         }

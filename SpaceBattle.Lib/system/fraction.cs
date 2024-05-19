@@ -41,14 +41,14 @@ namespace SpaceBattle.Lib {
             return HashCode.Combine(numerator, denominator);
         }
 
-        // public override bool Equals(object? obj)
-        // {
-        //     var item = obj as Fraction;
+        public override bool Equals(object? obj)
+        {
+            var item = obj as Fraction;
 
-        //     if (item is null){
-        //         return false;
-        //     }
-        //     return item.numerator == numerator && item.denominator == denominator;
-        // }
+            if (item is null){
+                return false;
+            }
+            return item.numerator == numerator && item.denominator == denominator;
+        }
     }
 }
