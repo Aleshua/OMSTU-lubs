@@ -38,7 +38,7 @@ namespace SpaceBattle.Lib {
         {
             if (obj is Fraction item)
             {
-                return item.numerator == numerator && item.denominator == denominator;
+                return item.numerator == this.numerator && item.denominator == this.denominator;
             }
             return false;
         }
